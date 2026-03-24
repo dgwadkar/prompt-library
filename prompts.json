@@ -24,28 +24,6 @@
       "featured": true
     },
     {
-      "id": "angular-component",
-      "title": "Angular standalone component",
-      "description": "Scaffold a modern Angular standalone component with best practices.",
-      "prompt": "You are a senior Angular engineer (Angular 17+). Create a standalone component for the following UI element.\n\nComponent: [describe the component, e.g. \"A data table with sortable columns, pagination, and row selection\"]\n\nRequirements:\n- Use standalone: true (no NgModule).\n- Use the new control flow syntax (@if, @for, @switch) instead of *ngIf/*ngFor.\n- Use signals for component state where appropriate.\n- Inputs via input() function, outputs via output() function.\n- Use OnPush change detection strategy.\n- Write semantic HTML with ARIA attributes for accessibility.\n- Component styles must be encapsulated (ViewEncapsulation.Emulated is fine).\n- Use trackBy equivalent in @for loops.\n- If the component needs async data, accept an Observable or Signal input and handle loading/error states.\n- Export the component so it can be imported directly in other standalone components.\n\nReturn:\n1. component.ts (logic + template using inline template if < 30 lines, else separate)\n2. component.scss\n3. component.spec.ts (at least 3 meaningful test cases using TestBed)\n4. Brief usage example showing how to import and use the component.",
-      "category": "Angular",
-      "tags": ["standalone", "signals", "angular-17"],
-      "author": "digvijay",
-      "created": "2025-02-01",
-      "featured": false
-    },
-    {
-      "id": "angular-rxjs-service",
-      "title": "RxJS Angular service",
-      "description": "Create an Angular service with proper RxJS patterns and state management.",
-      "prompt": "You are a senior Angular engineer. Create an Angular injectable service that manages state using RxJS.\n\nDomain: [describe the domain, e.g. \"Shopping cart with add, remove, update quantity, and total calculation\"]\n\nRequirements:\n- Use @Injectable({ providedIn: 'root' }) for tree-shakable singleton.\n- Manage internal state with a BehaviorSubject; expose it as a readonly Observable via asObservable().\n- All state mutations must go through dedicated public methods (never expose the Subject directly).\n- Use appropriate RxJS operators: map, distinctUntilChanged, shareReplay, combineLatest, switchMap, catchError, retry.\n- Handle HTTP calls with HttpClient; return Observables (do not subscribe inside the service — let the consumer decide).\n- Implement proper error handling: catchError with meaningful error types, not generic strings.\n- Add a destroy/cleanup pattern using takeUntilDestroyed() or DestroyRef.\n- Write JSDoc for every public method and property.\n- Include a companion .spec.ts file with tests using jasmine-marbles or manual subscribe + done() patterns.\n\nReturn the complete service file and its spec file.",
-      "category": "Angular",
-      "tags": ["rxjs", "state-management", "service"],
-      "author": "digvijay",
-      "created": "2025-02-05",
-      "featured": false
-    },
-    {
       "id": "test-junit5",
       "title": "JUnit 5 unit tests",
       "description": "Generate thorough JUnit 5 unit tests with Mockito following the AAA pattern.",
@@ -57,17 +35,6 @@
       "featured": true
     },
     {
-      "id": "test-cypress-e2e",
-      "title": "Cypress E2E flow",
-      "description": "Write a complete Cypress end-to-end test for a user workflow.",
-      "prompt": "You are a senior QA automation engineer. Write a complete Cypress E2E test for the following user flow.\n\nFlow: [describe the user flow, e.g. \"User registers, verifies email, logs in, updates profile, and logs out\"]\n\nRequirements:\n- Use Cypress 13+ with TypeScript.\n- Use data-cy selectors exclusively (never CSS classes or element tag selectors).\n- Structure: describe() block with beforeEach() for setup, individual it() blocks per step.\n- Use cy.intercept() to stub or wait on API calls; assert on request payloads and response status.\n- Use custom Cypress commands for reusable actions (e.g., cy.login(), cy.fillForm()).\n- Add assertions after every significant user action — don't just click through.\n- Handle loading states: use cy.get('[data-cy=...]').should('be.visible') before interacting.\n- Clean up test data in before() or after() hooks if needed.\n- Use cy.fixture() for test data instead of hardcoding strings.\n- Include a fixtures/*.json file with sample test data.\n- Test both happy path and at least one error/validation scenario.\n- No cy.wait(milliseconds) — use proper Cypress waits (intercept aliases, assertions).\n\nReturn:\n1. The spec file (cypress/e2e/[flow-name].cy.ts)\n2. Any custom commands (cypress/support/commands.ts additions)\n3. Fixture files (cypress/fixtures/*.json)",
-      "category": "Testing",
-      "tags": ["cypress", "e2e", "typescript", "data-cy"],
-      "author": "digvijay",
-      "created": "2025-02-15",
-      "featured": false
-    },
-    {
       "id": "arch-design-pattern",
       "title": "Design pattern advice",
       "description": "Get expert advice on which design pattern best solves your specific problem.",
@@ -76,39 +43,6 @@
       "tags": ["design-patterns", "gof", "solid", "architecture"],
       "author": "digvijay",
       "created": "2025-03-01",
-      "featured": false
-    },
-    {
-      "id": "git-commit-message",
-      "title": "Conventional commit message",
-      "description": "Generate a well-structured conventional commit message from a diff.",
-      "prompt": "You are a senior engineer who follows the Conventional Commits specification strictly.\n\nHere is my git diff:\n```diff\n[paste your git diff here]\n```\n\nGenerate a commit message following these rules:\n- Format: <type>(<scope>): <subject>\n- Types: feat, fix, refactor, test, docs, style, chore, perf, ci, build\n- Scope: the module, component, or area affected (e.g. auth, cart, api)\n- Subject: imperative mood, lowercase, no period at the end, max 72 characters\n- Body (if needed): explain WHY the change was made, not WHAT (the diff shows what). Wrap at 72 characters.\n- Footer (if needed): BREAKING CHANGE: description, or Closes #issue-number\n- If the diff contains multiple logical changes, suggest splitting into separate commits and provide each message.\n\nReturn ONLY the commit message(s), ready to paste into the terminal. No explanation needed unless suggesting a split.",
-      "category": "Git",
-      "tags": ["conventional-commits", "git", "workflow"],
-      "author": "digvijay",
-      "created": "2025-03-05",
-      "featured": false
-    },
-    {
-      "id": "debug-error",
-      "title": "Debug this error",
-      "description": "Systematically debug an error with root cause analysis and fix suggestions.",
-      "prompt": "You are a senior full-stack debugger. Systematically analyse the following error and help me fix it.\n\nError message / stack trace:\n```\n[paste the error message and full stack trace here]\n```\n\nRelevant code (if available):\n```\n[paste the relevant code section]\n```\n\nContext:\n- Language/Framework: [e.g. Java 21, Spring Boot 3.2, Angular 17]\n- When it happens: [e.g. on startup, when calling endpoint X, after deploying to prod]\n- What changed recently: [e.g. upgraded a dependency, added a new feature, nothing]\n\nPlease:\n1. **Root cause**: Explain what the error means in plain English and identify the root cause (not just the symptom).\n2. **Why it happens**: Explain the chain of events that leads to this error.\n3. **Fix**: Provide the exact code change to fix it. Show before and after.\n4. **Verify**: How to confirm the fix works (command to run, test to write).\n5. **Prevent**: How to prevent this class of error in the future (linter rule, test, type safety, etc.).\n6. **Related issues**: Mention if this error is commonly caused by other things I should also check.\n\nBe specific. Don't give generic advice — tailor everything to the exact error shown.",
-      "category": "Debug",
-      "tags": ["debugging", "error-handling", "troubleshooting"],
-      "author": "digvijay",
-      "created": "2025-03-10",
-      "featured": false
-    },
-    {
-      "id": "git-pr-description",
-      "title": "PR description",
-      "description": "Generate a thorough pull request description from a diff or branch summary.",
-      "prompt": "You are a senior engineer writing a pull request description for your team.\n\nHere is the diff or summary of changes:\n```\n[paste your git diff, commit log, or summary of changes]\n```\n\nJira/Issue ticket: [ticket ID or \"none\"]\n\nGenerate a PR description with these sections:\n\n## What\nOne paragraph summarising what this PR does. Be specific — mention the feature, endpoint, component, or bug by name.\n\n## Why\nExplain the motivation. Link to the ticket/issue. Why is this change needed now?\n\n## How\nBrief technical summary of the approach. Mention key design decisions, patterns used, or trade-offs made.\n\n## Testing\n- List the manual testing steps a reviewer should follow.\n- Mention which automated tests were added or modified.\n- Note any edge cases explicitly tested.\n\n## Screenshots / Evidence\n[placeholder for screenshots if UI change, or curl commands / API responses if backend]\n\n## Checklist\n- [ ] Unit tests pass\n- [ ] E2E tests pass (if applicable)\n- [ ] No new lint warnings\n- [ ] Documentation updated (if applicable)\n- [ ] Backward compatible (or migration documented)\n- [ ] Reviewed own diff before requesting review\n\nKeep the tone professional but not overly formal. Aim for a description that lets a reviewer understand the full context in under 2 minutes.",
-      "category": "Git",
-      "tags": ["pull-request", "code-review", "workflow"],
-      "author": "digvijay",
-      "created": "2025-03-12",
       "featured": false
     }
   ]
