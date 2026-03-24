@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Prompt Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       CSS CUSTOM PROPERTIES
+       ================================================================ */
+    :root {
+      --font-ui: 'Instrument Sans', system-ui, sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+
+      --bg-page: #f7f6f3;
+      --bg-card: #ffffff;
+      --bg-toolbar: #ffffff;
+      --border: #e5e4e0;
+      --border-hover: #c8c7c2;
+      --text-primary: #1a1917;
+      --text-secondary: #6b6a66;
+      --text-muted: #9b9a96;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-subtle: #eff6ff;
+      --shadow-card: 0 1px 3px rgba(0,0,0,.06);
+      --shadow-hover: 0 4px 12px rgba(0,0,0,.10);
+      --shimmer-from: #f0efec;
+      --shimmer-to: #e8e7e3;
+
+      --badge-java-bg: #fef3c7;
+      --badge-java-text: #92400e;
+      --badge-angular-bg: #fee2e2;
+      --badge-angular-text: #991b1b;
+      --badge-testing-bg: #d1fae5;
+      --badge-testing-text: #065f46;
+      --badge-architecture-bg: #dbeafe;
+      --badge-architecture-text: #1e40af;
+      --badge-git-bg: #ede9fe;
+      --badge-git-text: #5b21b6;
+      --badge-debug-bg: #fce7f3;
+      --badge-debug-text: #9d174d;
+      --badge-general-bg: #f1f5f9;
+      --badge-general-text: #475569;
+
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #111110;
+      --bg-card: #1c1c1a;
+      --bg-toolbar: #1c1c1a;
+      --border: #2e2e2b;
+      --border-hover: #44443f;
+      --text-primary: #f0ede8;
+      --text-secondary: #a09e99;
+      --text-muted: #6b6966;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-subtle: #172554;
+      --shadow-card: 0 1px 3px rgba(0,0,0,.3);
+      --shadow-hover: 0 4px 16px rgba(0,0,0,.4);
+      --shimmer-from: #242422;
+      --shimmer-to: #2e2e2b;
+
+      --badge-java-bg: rgba(254,243,199,.25);
+      --badge-java-text: #fbbf24;
+      --badge-angular-bg: rgba(254,226,226,.25);
+      --badge-angular-text: #fca5a5;
+      --badge-testing-bg: rgba(209,250,229,.25);
+      --badge-testing-text: #6ee7b7;
+      --badge-architecture-bg: rgba(219,234,254,.25);
+      --badge-architecture-text: #93c5fd;
+      --badge-git-bg: rgba(237,233,254,.25);
+      --badge-git-text: #c4b5fd;
+      --badge-debug-bg: rgba(252,231,243,.25);
+      --badge-debug-text: #f9a8d4;
+      --badge-general-bg: rgba(241,245,249,.25);
+      --badge-general-text: #94a3b8;
+    }
+
+    /* ================================================================
+       RESET & BASE
+       ================================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ================================================================
+       LAYOUT
+       ================================================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ================================================================
+       HEADER
+       ================================================================ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .header-left h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .header-left p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* ================================================================
+       STATS BAR
+       ================================================================ */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-card .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ================================================================
+       TOOLBAR
+       ================================================================ */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-toolbar);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-card);
+      flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+      flex: 1;
+      min-width: 180px;
+      position: relative;
+    }
+
+    .search-wrapper svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 16px;
+      height: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-input:focus { border-color: var(--accent); }
+
+    .toolbar select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .toolbar select:focus { border-color: var(--accent); }
+
+    .btn-suggest {
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .btn-suggest:hover { background: var(--accent-hover); }
+
+    /* ================================================================
+       PROMPT GRID
+       ================================================================ */
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+      padding-bottom: 48px;
+    }
+
+    /* ================================================================
+       PROMPT CARD
+       ================================================================ */
+    .prompt-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 0.15s, transform 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prompt-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .badge-featured {
+      background: var(--accent-subtle);
+      color: var(--accent);
+    }
+
+    .card-meta {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .card-description {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .prompt-text-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .prompt-text {
+      font-family: var(--font-code);
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow: hidden;
+      max-height: 7.75em;
+      transition: max-height 0.2s ease;
+    }
+
+    .prompt-text.expanded {
+      max-height: none;
+    }
+
+    .toggle-prompt {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: var(--font-ui);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 0;
+      margin-top: 4px;
+    }
+
+    .toggle-prompt:hover { text-decoration: underline; }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.6875rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: auto;
+      gap: 12px;
+    }
+
+    .copy-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: var(--font-ui);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ================================================================
+       SKELETON LOADER
+       ================================================================ */
+    .skeleton-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .skeleton-line {
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--shimmer-from) 25%, var(--shimmer-to) 50%, var(--shimmer-from) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-title { height: 20px; width: 60%; margin-bottom: 10px; }
+    .skeleton-meta { height: 14px; width: 40%; margin-bottom: 14px; }
+    .skeleton-body { height: 80px; width: 100%; margin-bottom: 12px; }
+    .skeleton-footer { height: 16px; width: 50%; }
+
+    /* ================================================================
+       EMPTY & ERROR STATES
+       ================================================================ */
+    .empty-state, .error-state {
+      text-align: center;
+      padding: 60px 20px;
+      grid-column: 1 / -1;
+    }
+
+    .empty-state .icon, .error-state .icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .empty-state h3, .error-state h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .empty-state p, .error-state p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    /* ================================================================
+       MODAL
+       ================================================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s, visibility 0.15s;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .modal h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--text-secondary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-group textarea {
+      font-family: var(--font-code);
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .btn-secondary {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .snippet-output {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .snippet-output.visible { display: block; }
+
+    .snippet-output p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .snippet-output a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .snippet-output a:hover { text-decoration: underline; }
+
+    .snippet-code {
+      font-family: var(--font-code);
+      font-size: 0.75rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 240px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .snippet-copy-btn {
+      margin-top: 8px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: var(--font-ui);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .snippet-copy-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* ================================================================
+       RESPONSIVE
+       ================================================================ */
+    @media (max-width: 768px) {
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .toolbar select, .btn-suggest {
+        width: 100%;
+      }
+      .prompt-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .header { padding: 16px 0; }
+      .stats-bar { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat-card { padding: 12px 14px; }
+      .stat-card .stat-value { font-size: 1.25rem; }
+      .card-footer { flex-direction: column; align-items: flex-start; }
+      .modal { padding: 20px; }
+    }
+
+    /* ================================================================
+       KEYBOARD HINT
+       ================================================================ */
+    .kbd-hint {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 1px 6px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      font-family: var(--font-code);
+    }
+
+    .search-input:focus ~ .kbd-hint { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-left">
+        <h1 id="app-title"></h1>
+        <p id="app-tagline"></p>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+    </header>
+
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <div class="toolbar" id="toolbar">
+      <div class="search-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Search prompts…" autocomplete="off">
+        <span class="kbd-hint">/</span>
+      </div>
+      <select id="category-filter">
+        <option value="">All categories</option>
+        <option value="Java">Java</option>
+        <option value="Angular">Angular</option>
+        <option value="Testing">Testing</option>
+        <option value="Architecture">Architecture</option>
+        <option value="Git">Git</option>
+        <option value="Debug">Debug</option>
+        <option value="General">General</option>
+      </select>
+      <select id="sort-select">
+        <option value="featured">Featured first</option>
+        <option value="newest">Newest</option>
+        <option value="az">A–Z</option>
+      </select>
+      <button class="btn-suggest" id="btn-suggest">+ Suggest a prompt</button>
+    </div>
+
+    <div class="prompt-grid" id="prompt-grid"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <h2>Suggest a Prompt</h2>
+      <form id="suggest-form">
+        <div class="form-group">
+          <label for="form-title">Title *</label>
+          <input type="text" id="form-title" required>
+        </div>
+        <div class="form-group">
+          <label for="form-description">Description (one sentence) *</label>
+          <input type="text" id="form-description" required>
+        </div>
+        <div class="form-group">
+          <label for="form-category">Category *</label>
+          <select id="form-category" required>
+            <option value="">Select…</option>
+            <option value="Java">Java</option>
+            <option value="Angular">Angular</option>
+            <option value="Testing">Testing</option>
+            <option value="Architecture">Architecture</option>
+            <option value="Git">Git</option>
+            <option value="Debug">Debug</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-tags">Tags (comma-separated, optional)</label>
+          <input type="text" id="form-tags" placeholder="e.g. spring-boot, dto, validation">
+        </div>
+        <div class="form-group">
+          <label for="form-prompt">Prompt text *</label>
+          <textarea id="form-prompt" required placeholder="Write the full prompt text here…"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="form-author">Author / Your name (optional)</label>
+          <input type="text" id="form-author">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="btn-cancel-modal">Cancel</button>
+          <button type="submit" class="btn-primary">Generate snippet</button>
+        </div>
+      </form>
+      <div class="snippet-output" id="snippet-output">
+        <p>Copy this snippet and add it to the <code>prompts</code> array in <code>prompts.json</code>, then
+          <a id="pr-link" href="#" target="_blank" rel="noopener">open a pull request</a>.
+        </p>
+        <div class="snippet-code" id="snippet-code"></div>
+        <button class="snippet-copy-btn" id="snippet-copy-btn">Copy snippet</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =============================================================
+       CONFIGURATION
+       ============================================================= */
+    const CONFIG = {
+      repoOwner: 'your-org',
+      repoName:  'team-prompts',
+      repoUrl:   'https://github.com/your-org/team-prompts',
+      appTitle:  'Team Prompt Library',
+      appTagline:'Shared prompts for the engineering team',
+    };
+
+    /* =============================================================
+       STATE
+       ============================================================= */
+    const state = {
+      prompts: [],
+      search: '',
+      category: '',
+      sort: 'featured',
+      theme: 'light',
+    };
+
+    /* =============================================================
+       DOM REFS
+       ============================================================= */
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const domGrid = $('#prompt-grid');
+    const domStats = $('#stats-bar');
+    const domSearch = $('#search-input');
+    const domCategory = $('#category-filter');
+    const domSort = $('#sort-select');
+    const domModalOverlay = $('#modal-overlay');
+    const domSuggestForm = $('#suggest-form');
+    const domSnippetOutput = $('#snippet-output');
+    const domSnippetCode = $('#snippet-code');
+    const domPrLink = $('#pr-link');
+    const domThemeToggle = $('#theme-toggle');
+
+    /* =============================================================
+       INIT
+       ============================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      $('#app-title').textContent = CONFIG.appTitle;
+      $('#app-tagline').textContent = CONFIG.appTagline;
+      document.title = CONFIG.appTitle;
+
+      initTheme();
+      bindEvents();
+      loadPrompts();
+    });
+
+    /* =============================================================
+       THEME
+       ============================================================= */
+    function initTheme() {
+      const stored = localStorage.getItem('theme');
+      if (stored) {
+        state.theme = stored;
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        state.theme = 'dark';
+      }
+      applyTheme();
+    }
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', state.theme);
+      domThemeToggle.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+      domThemeToggle.setAttribute('aria-label', state.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', state.theme);
+      applyTheme();
+    }
+
+    /* =============================================================
+       DATA LOADING
+       ============================================================= */
+    async function loadPrompts() {
+      showSkeletons();
+      try {
+        const res = await fetch('./prompts.json');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        state.prompts = data.prompts;
+        render();
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    function showSkeletons() {
+      domStats.innerHTML = Array.from({ length: 3 }, () =>
+        `<div class="stat-card">
+          <div class="skeleton-line" style="height:24px;width:40%;margin-bottom:6px"></div>
+          <div class="skeleton-line" style="height:14px;width:60%"></div>
+        </div>`
+      ).join('');
+
+      domGrid.innerHTML = Array.from({ length: 3 }, () =>
+        `<div class="skeleton-card">
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line skeleton-meta"></div>
+          <div class="skeleton-line skeleton-body"></div>
+          <div class="skeleton-line skeleton-footer"></div>
+        </div>`
+      ).join('');
+    }
+
+    function showError(message) {
+      domStats.innerHTML = '';
+      domGrid.innerHTML = `
+        <div class="error-state">
+          <div class="icon">⚠️</div>
+          <h3>Failed to load prompts</h3>
+          <p>${escapeHtml(message)}. Check that <code>prompts.json</code> exists and is accessible.</p>
+        </div>`;
+    }
+
+    /* =============================================================
+       RENDERING
+       ============================================================= */
+    function render() {
+      renderStats();
+      renderGrid();
+    }
+
+    function renderStats() {
+      const prompts = state.prompts;
+      const categories = new Set(prompts.map(p => p.category));
+      const authors = new Set(prompts.map(p => p.author));
+
+      const stats = [
+        { value: prompts.length, label: 'Total prompts' },
+        { value: categories.size, label: 'Categories' },
+        { value: authors.size, label: 'Contributors' },
+      ];
+
+      domStats.innerHTML = stats.map(s =>
+        `<div class="stat-card">
+          <div class="stat-value">${s.value}</div>
+          <div class="stat-label">${s.label}</div>
+        </div>`
+      ).join('');
+    }
+
+    function getFilteredPrompts() {
+      let list = [...state.prompts];
+      const q = state.search.toLowerCase().trim();
+
+      if (q) {
+        list = list.filter(p =>
+          p.title.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.prompt.toLowerCase().includes(q) ||
+          p.author.toLowerCase().includes(q) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(q))
+        );
+      }
+
+      if (state.category) {
+        list = list.filter(p => p.category === state.category);
+      }
+
+      list.sort((a, b) => {
+        switch (state.sort) {
+          case 'featured':
+            if (a.featured && !b.featured) return -1;
+            if (!a.featured && b.featured) return 1;
+            return new Date(b.created) - new Date(a.created);
+          case 'newest':
+            return new Date(b.created) - new Date(a.created);
+          case 'az':
+            return a.title.localeCompare(b.title);
+          default:
+            return 0;
+        }
+      });
+
+      return list;
+    }
+
+    function renderGrid() {
+      const filtered = getFilteredPrompts();
+
+      if (filtered.length === 0) {
+        domGrid.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🔍</div>
+            <h3>No prompts found</h3>
+            <p>Try adjusting your search or filter to find what you're looking for.</p>
+          </div>`;
+        return;
+      }
+
+      domGrid.innerHTML = filtered.map(p => renderCard(p)).join('');
+    }
+
+    function renderCard(p) {
+      const categoryClass = p.category.toLowerCase();
+      const tags = (p.tags || []);
+
+      return `
+        <div class="prompt-card" data-id="${p.id}">
+          <div class="card-header">
+            <span class="card-title">${escapeHtml(p.title)}</span>
+            <div class="card-badges">
+              ${p.featured ? '<span class="badge badge-featured">Featured</span>' : ''}
+              <span class="badge" style="background:var(--badge-${categoryClass}-bg);color:var(--badge-${categoryClass}-text)">${escapeHtml(p.category)}</span>
+            </div>
+          </div>
+          <div class="card-meta">${escapeHtml(p.author)} · ${formatDate(p.created)}</div>
+          <div class="card-description">${escapeHtml(p.description)}</div>
+          <div class="prompt-text-wrapper">
+            <div class="prompt-text" id="pt-${p.id}">${escapeHtml(p.prompt)}</div>
+            <button class="toggle-prompt" data-id="${p.id}" onclick="toggleExpand('${p.id}')">Show more</button>
+          </div>
+          ${tags.length > 0 ? `<div class="card-tags">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+          <div class="card-footer">
+            <button class="copy-btn" onclick="copyPrompt('${p.id}', this)">Copy</button>
+          </div>
+        </div>`;
+    }
+
+    /* =============================================================
+       INTERACTIONS
+       ============================================================= */
+    function toggleExpand(id) {
+      const el = document.getElementById(`pt-${id}`);
+      const btn = document.querySelector(`.toggle-prompt[data-id="${id}"]`);
+      if (!el || !btn) return;
+      const expanded = el.classList.toggle('expanded');
+      btn.textContent = expanded ? 'Show less' : 'Show more';
+    }
+
+    function copyPrompt(id, btn) {
+      const prompt = state.prompts.find(p => p.id === id);
+      if (!prompt) return;
+      navigator.clipboard.writeText(prompt.prompt).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      }).catch(() => {
+        btn.textContent = 'Failed';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+      });
+    }
+
+    /* =============================================================
+       EVENTS
+       ============================================================= */
+    function bindEvents() {
+      domSearch.addEventListener('input', () => {
+        state.search = domSearch.value;
+        renderGrid();
+      });
+
+      domCategory.addEventListener('change', () => {
+        state.category = domCategory.value;
+        renderGrid();
+      });
+
+      domSort.addEventListener('change', () => {
+        state.sort = domSort.value;
+        renderGrid();
+      });
+
+      domThemeToggle.addEventListener('click', toggleTheme);
+
+      $('#btn-suggest').addEventListener('click', openModal);
+      $('#btn-cancel-modal').addEventListener('click', closeModal);
+      domModalOverlay.addEventListener('click', (e) => {
+        if (e.target === domModalOverlay) closeModal();
+      });
+
+      domSuggestForm.addEventListener('submit', handleSuggestSubmit);
+
+      $('#snippet-copy-btn').addEventListener('click', () => {
+        navigator.clipboard.writeText(domSnippetCode.textContent).then(() => {
+          const btn = $('#snippet-copy-btn');
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = 'Copy snippet'; }, 1500);
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && !isInputFocused()) {
+          e.preventDefault();
+          domSearch.focus();
+        }
+        if (e.key === 'Escape') {
+          if (domModalOverlay.classList.contains('open')) {
+            closeModal();
+          } else if (document.activeElement === domSearch) {
+            domSearch.value = '';
+            state.search = '';
+            domSearch.blur();
+            renderGrid();
+          }
+        }
+      });
+    }
+
+    function isInputFocused() {
+      const tag = document.activeElement?.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    }
+
+    /* =============================================================
+       MODAL
+       ============================================================= */
+    function openModal() {
+      domSuggestForm.reset();
+      domSnippetOutput.classList.remove('visible');
+      domModalOverlay.classList.add('open');
+    }
+
+    function closeModal() {
+      domModalOverlay.classList.remove('open');
+    }
+
+    function handleSuggestSubmit(e) {
+      e.preventDefault();
+      const title = $('#form-title').value.trim();
+      const description = $('#form-description').value.trim();
+      const category = $('#form-category').value;
+      const tagsRaw = $('#form-tags').value.trim();
+      const promptText = $('#form-prompt').value.trim();
+      const author = $('#form-author').value.trim() || 'anonymous';
+
+      const id = title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .slice(0, 50);
+
+      const tags = tagsRaw
+        ? tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean)
+        : [];
+
+      const today = new Date().toISOString().split('T')[0];
+
+      const snippet = {
+        id,
+        title,
+        description,
+        prompt: promptText,
+        category,
+        tags,
+        author,
+        created: today,
+        featured: false,
+      };
+
+      domSnippetCode.textContent = JSON.stringify(snippet, null, 2);
+      domPrLink.href = `https://github.com/${CONFIG.repoOwner}/${CONFIG.repoName}/edit/main/prompts.json`;
+      domSnippetOutput.classList.add('visible');
+    }
+
+    /* =============================================================
+       UTILITIES
+       ============================================================= */
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+  </script>
+</body>
+</html>
