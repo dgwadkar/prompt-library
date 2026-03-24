@@ -2,7 +2,7 @@
 
 A collaborative prompt library for the engineering team. Browse, search, and contribute AI prompts — all from a zero-dependency static site hosted on GitHub Pages.
 
-<img width="1193" height="1097" alt="image" src="https://github.com/user-attachments/assets/206dc7dd-d612-469b-9d85-fb842d9b92a3" />
+<img width="1193" height="1097" alt="image" src="https://github.com/user-attachments/assets/5c7f9e69-ad20-483b-9305-599d8f33cb56" />
 
 **Live site:** [https://dgwadkar.github.io/prompt-library/](https://dgwadkar.github.io/prompt-library/)
 
