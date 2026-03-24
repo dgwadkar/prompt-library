@@ -4,7 +4,7 @@ A collaborative prompt library for the engineering team. Browse, search, and con
 
 ![screenshot](screenshot.png)
 
-**Live site:** [https://your-org.github.io/team-prompts/](https://your-org.github.io/team-prompts/)
+**Live site:** [https://your-org.github.io/team-prompts/](https://dgwadkar.github.io/prompt-library/)
 
 ## What is this?
 
